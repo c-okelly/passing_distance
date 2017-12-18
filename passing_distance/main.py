@@ -15,9 +15,10 @@ def main():
     maxRunCount = 1
 
     print("Start of distance sensor")
+    startTime = time.time()
+
     # Recover from collection errors - unless repeated quickly
     while True:
-        startTime = time.time()
         if (runCount > maxRunCount):
             break
         try:
@@ -32,7 +33,7 @@ def main():
 
 def collectAndStoreData(saveLocation="data"):
 
-    sensorWaitTime = 0.05
+    sensorWaitTime = 0.01
     dataPerWrite = 50
     fileCount = 0
     dataCollectionCount = 0
@@ -44,26 +45,28 @@ def collectAndStoreData(saveLocation="data"):
 
     # Data collection
     # TODO Replace with Async data collection
+    startTime = time.time()
     while (True):
 
         # Collect data and input into sensorData
-        sensorData = {**sensorData, **collectSensorData(sensors)}
+        sensorData = {**sensorData, **collectSensorData(sensors, sensorWaitTime)}
         dataCollectionCount += 1
 
         # Store data in local file
-        if (sensorDataCount > dataPerWrite):
-            print(sensorDataCount / (time.time() - startTime), " recordings a second.") 
+        if (dataCollectionCount > dataPerWrite):
+            print(dataCollectionCount / (time.time() - startTime), " recordings a second.") 
             fileCount += 1
+            print(sensorData)
             writeDataToFile(sensorData, dirName, fileCount)
-            sensorDataCount = 0
+            dataCollectionCount = 0
             sensorData = {}
+            startTime = time.time()
 
-def collectSensorData(sensors):
+def collectSensorData(sensors, sensorWaitTime):
     sensorData = {}
     for i in sensors:
         data = i.getData()
         sensorData[data["time"]] =  data
-        sensorDataCount += 1
         time.sleep(sensorWaitTime)
 
     return sensorData

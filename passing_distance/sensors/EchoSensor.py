@@ -58,7 +58,7 @@ class EchoSensor():
         pulse_end = time.time()
 
         # TODO set properly
-        self._timeOfMeasurement = 0# pulse_start
+        self._timeOfMeasurement = pulse_start
 
         waitCount = 0
         while (GPIO.input(self.echo) == 0):
@@ -72,8 +72,8 @@ class EchoSensor():
 
         pulse_duration = pulse_end - pulse_start
 
-        print(waitCount," count")
-        print(pulse_duration)
+        # print(waitCount," count")
+        # print(pulse_duration)
         distance = self._convertDistance(pulse_duration)
 
         # Check if count settled to quiclky
