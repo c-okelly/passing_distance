@@ -85,6 +85,9 @@ def writeDataToFile(data, dirName, fileCount):
 def createDirectory(saveLocation):
 
     existingFiles = os.listdir(saveLocation)
+    if "README.md" in existingFiles:
+        existingFiles.remove("README.md")
+
     if len(existingFiles) == 0:
         newDir = "data1"
     else:
@@ -105,4 +108,4 @@ def setLogger():
 if __name__ == "__main__":
 
     print("Start")
-    # main()
+    main()
