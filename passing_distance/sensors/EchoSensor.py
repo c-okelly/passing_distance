@@ -1,14 +1,14 @@
 ## Author Conor O'Kelly
 ## Echo sensor
 
-from sensors.SensorInterface import Sensor
+#from sensors.SensorInterface import Sensor
 import RPi.GPIO as GPIO
 import time
 import datetime
 
-class DistanceSensor(Sensor):
+class EchoSensor():
 
-    def __init__(self,sensorName, TRIG=20, ECHO=26, GpioMode=GPIO.BCM, warnings=False):
+    def __init__(self,sensorName, TRIG=16, ECHO=19, GpioMode=GPIO.BCM, warnings=False):
 
         self.sensorName = sensorName
         self.trig = TRIG

@@ -1,4 +1,4 @@
-from sensors.DistanceSensor import DistanceSensor
+from sensors.EchoSensor import EchoSensor
 import time, datetime
 import json
 import os, errno
@@ -72,8 +72,8 @@ def createSensors():
 
     sensors = []
     # TODO Sensors should be generated from config file
-    sensors.append(DistanceSensor("Sensor1",16,19))
-    #sensor2.append(DistanceSensor("Sensor2",20,26))
+    sensors.append(EchoSensor("Sensor1",16,19))
+    #sensors.append(EchoSensor("Sensor2",20,26))
 
     return sensors
 
