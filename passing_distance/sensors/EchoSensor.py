@@ -77,6 +77,7 @@ class EchoSensor():
         distance = self._convertDistance(pulse_duration)
 
         # Check if count settled to quiclky
+        # print(waitCount, distance)
         if waitCount < 10:
             return -2
 
@@ -89,7 +90,6 @@ class EchoSensor():
 
         # Speed of sound = 34300 m/s. Round trip
         distance = pulse_duration * 34300 / 2
-        #distance = round(distance, 2)
         return distance
 
 

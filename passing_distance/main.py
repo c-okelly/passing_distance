@@ -1,7 +1,7 @@
 from sensors.EchoSensor import EchoSensor
+from utlis.utilities import writeDataToFile
 import time, datetime
-import json
-import os, errno
+import os, sys, errno
 import logging, traceback
 
 def main():
@@ -54,7 +54,7 @@ def collectAndStoreData(saveLocation="data"):
 
         # Store data in local file
         if (dataCollectionCount > dataPerWrite):
-            print(dataCollectionCount / (time.time() - startTime), " recordings a second.") 
+            print(dataCollectionCount / (time.time() - startTime), " recordings a second. \n") 
             fileCount += 1
             print(sensorData)
             writeDataToFile(sensorData, dirName, fileCount)
@@ -80,10 +80,6 @@ def createSensors():
 
     return sensors
 
-def writeDataToFile(data, dirName, fileCount):
-    fileName = "data/" + dirName + "/data" + str(fileCount) + ".json" 
-    with open(fileName, 'w+') as fp:
-        json.dump(data, fp)
 
 def createDirectory(saveLocation):
 
@@ -105,10 +101,11 @@ def createDirectory(saveLocation):
     return newDir
 
 def setLogger():
-    logging.basicConfig(filename='collectSesnorData.log',level=logging.DEBUG)
+    fileName = "logs/collectSensorData.log"
+    logging.basicConfig(filename=fileName, level=logging.DEBUG)
     logging.info('Start of logs. Time={}'.format(time.ctime()))
 
 if __name__ == "__main__":
 
-    print("Start")
+    print("Start sensor running")
     main()
