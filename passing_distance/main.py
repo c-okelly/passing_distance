@@ -1,13 +1,15 @@
 from sensors.EchoSensor import EchoSensor
-from utlis.utilities import writeDataToFile
+from utlis.utilities import writeDataToFile, createDirectory
 import time, datetime
 import os, sys, errno
 import logging, traceback
 
 def main():
 
+    # Script path
+    path =  os.path.dirname(os.path.realpath(__file__)) + "/../"
     # Set logger
-    setLogger()
+    setLogger(path)
 
     # Run time in seconds
     minRunTimeSecs = 1
@@ -22,17 +24,23 @@ def main():
         if (runCount > maxRunCount):
             break
         try:
-            collectAndStoreData()
+            collectAndStoreData(path)
         except Exception as e:
             runTime = time.time() - startTime
+            logging.info('\n')
             logging.debug('Ran for {} seconds. Current time={}'.format(runTime, time.ctime()))
-            logging.debug('Trace {}'.format(traceback.print_exc(), ))
+            logging.debug('Message {}'.format(str(e)))
+            logging.exception("Excpetion in main.")
+            startTime = time.time()
         if (runTime < minRunTimeSecs):
             logging.debug('Exited as run time is too short. Current time={}'.format(time.ctime()))
             break
 
-def collectAndStoreData(saveLocation="data"):
+def collectAndStoreData(path, saveLocation="data"):
 
+    saveLocation = path + saveLocation
+
+    # Collection varibles
     sensorWaitTime = 0.01
     dataPerWrite = 50
     fileCount = 0
@@ -56,8 +64,8 @@ def collectAndStoreData(saveLocation="data"):
         if (dataCollectionCount > dataPerWrite):
             print(dataCollectionCount / (time.time() - startTime), " recordings a second. \n") 
             fileCount += 1
-            print(sensorData)
-            writeDataToFile(sensorData, dirName, fileCount)
+            # print(sensorData)
+            writeDataToFile(path, sensorData, dirName, fileCount)
             dataCollectionCount = 0
             sensorData = {}
             startTime = time.time()
@@ -80,28 +88,8 @@ def createSensors():
 
     return sensors
 
-
-def createDirectory(saveLocation):
-
-    existingFiles = os.listdir(saveLocation)
-    if "README.md" in existingFiles:
-        existingFiles.remove("README.md")
-
-    if len(existingFiles) == 0:
-        newDir = "data1"
-    else:
-        newDir = "data" + str(max([int(x.split("a")[2]) for x in existingFiles])+1)
-    try:
-        os.makedirs(saveLocation + "/" + newDir)
-    except OSError as exception:
-        logging.debug('Error - {} \n Current time={}'.format(raceback.print_exc(), time.ctime()))
-        # logging.info("Setting data directory as current")
-        # TODO Create new directroy for savaing data
-        raise exception
-    return newDir
-
-def setLogger():
-    fileName = "logs/collectSensorData.log"
+def setLogger(path):
+    fileName = path + "logs/collectSensorData.log"
     logging.basicConfig(filename=fileName, level=logging.DEBUG)
     logging.info('Start of logs. Time={}'.format(time.ctime()))
 
