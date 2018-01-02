@@ -84,7 +84,7 @@ def createSensors():
     sensors = []
     # TODO Sensors should be generated from config file
     sensors.append(EchoSensor("Sensor1",16,19))
-    #sensors.append(EchoSensor("Sensor2",20,26))
+    sensors.append(EchoSensor("Sensor2",20,26))
 
     return sensors
 

@@ -51,16 +51,20 @@ def main(folder):
 
                 ses1.append([date,distance])
                 dateTimeStamps.append(timeStamp)
-            # else:
-            #     date = parse(dic[k]["time"])
-            #     distance = dic[k]["distance"]
-            #     ses2.append([date,distance])
+            else:
+                timeStamp = float(dic[k]['time'])
+                date = convertEpoc(timeStamp)
+                distance = dic[k]["distance"]
+
+                ses2.append([date,distance])
+                dateTimeStamps.append(timeStamp)
 
     sensorData = prepareDateForPlot(ses1)
     s2 = prepareDateForPlot(ses2)
 
     # Add data to plot
-    plt.plot(sensorData[0], sensorData[1])
+    plt.scatter(sensorData[0], sensorData[1])
+    plt.scatter(s2[0],s2[1])
 
     # Set min max
     xmin = min(dateTimeStamps) 
@@ -70,8 +74,6 @@ def main(folder):
     xmax = convertEpoc(xmax + delta)
     plt.xlim(xmin, xmax)
 
-    # Plot data
-    # plt.plot(s2[0],s2[1])
     plt.show()
 
 if __name__ == "__main__":
