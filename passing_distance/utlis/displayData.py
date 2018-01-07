@@ -11,9 +11,12 @@ def loadData(dirName):
     files = os.listdir(dirName)
     for i in files:
         curFile = dirName + "/" + i
-        with open(curFile) as json_data:
-            d = json.load(json_data)
-            data.append(d)
+        try:
+            with open(curFile) as json_data:
+                d = json.load(json_data)
+                data.append(d)
+        except Exception as e:
+            print(curFile, " failed to load")
     return data
 
 def prepareDateForPlot(singleSensorData):
@@ -24,7 +27,7 @@ def prepareDateForPlot(singleSensorData):
 
     # Clean data
     for i in sortedData:
-        if (i[1] != 1000):
+        if (i[1] != 1000 and i[1] > 0):
             x.append(i[0])
             y.append(i[1])
 
