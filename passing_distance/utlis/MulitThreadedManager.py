@@ -5,7 +5,8 @@ import time
 
 exitFlag = 0
 
-class myThread (threading.Thread):
+class sensorExecutor(threading.Thread):
+
    def __init__(self, threadID, name, delay):
       threading.Thread.__init__(self)
       self.threadID = threadID
@@ -25,13 +26,22 @@ def print_time(threadName, delay, counter):
       print ("%s: %s. %s" % (threadName, time.time(), counter))
       counter -= 1
 
-# Create new threads
-thread1 = myThread(1, "Thread-1", 0.01)
-thread2 = myThread(2, "Thread-2", 0.01)
+if __name__ == "__main__":
 
-# Start new Threads
-thread1.start()
-thread2.start()
-thread1.join()
-thread2.join()
-print ("Exiting Main Thread")
+      # Create data structure
+
+      # Execute threads
+
+      # Verify data is present
+      
+
+      # Create new threads
+      thread1 = sensorExecutor(1, "Thread-1", 0.01)
+      thread2 = sensorExecutor(2, "Thread-2", 0.01)
+
+      # Start new Threads
+      thread1.start()
+      thread2.start()
+      thread1.join()
+      thread2.join()
+      print ("Exiting Main Thread")

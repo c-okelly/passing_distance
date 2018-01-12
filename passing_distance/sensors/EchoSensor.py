@@ -19,11 +19,11 @@ class EchoSensor():
         self._setup()
 
         ### Main Varibles ###
-        self._speedOfSound = 34300 # m/s
+        self._speedOfSound = 34_300 # m/s
         self._timeOfMeasurement = 0
         self._sensorMaxWait = 1_000
         self._maxDistance = 300
-        self._maxDistanceWait = (self._maxDistance / 34300) * 1.1 # Second to wait before ingorning return result
+        self._maxDistanceWait = (self._maxDistance / self._speedOfSound) * 1.1 # Second to wait before ingorning return result
 
     def _setup(self):
 
@@ -50,8 +50,6 @@ class EchoSensor():
         return {"sensorName":self.sensorName, "distance":distance, "time":time, "error":error}
 
     def _calculateDistance(self):
-
-        distance = -1
 
         # Start moudle program
         GPIO.output(self.trig,True)
