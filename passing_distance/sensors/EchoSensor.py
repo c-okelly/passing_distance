@@ -15,11 +15,15 @@ class EchoSensor():
         self.echo = ECHO
         self.gpioMode = GpioMode
         self.warnings = warnings
-        self._setup();
+        self.error = "None" 
+        self._setup()
 
+        ### Main Varibles ###
+        self._speedOfSound = 34300 # m/s
         self._timeOfMeasurement = 0
         self._sensorMaxWait = 1_000
-        self._maxDistance = 400
+        self._maxDistance = 300
+        self._maxDistanceWait = (self._maxDistance / 34300) * 1.1 # Second to wait before ingorning return result
 
     def _setup(self):
 
@@ -40,10 +44,10 @@ class EchoSensor():
 
     def getData(self):
 
-        distance = self._calculateDistance()
+        distance, error = self._calculateDistance()
         time = str(self._timeOfMeasurement)
 
-        return {"sensorName":self.sensorName, "distance":distance, "time":time}
+        return {"sensorName":self.sensorName, "distance":distance, "time":time, "error":error}
 
     def _calculateDistance(self):
 
@@ -64,10 +68,13 @@ class EchoSensor():
         while (GPIO.input(self.echo) == 0):
             waitCount += 1
             if (waitCount > self._sensorMaxWait):
-                return -3
+                self.error = "Sensor did not start correctly"
+                return (0, self.error)
+
             pulse_start = time.time()
 
-        while (GPIO.input(self.echo) == 1 and (pulse_end - pulse_start) < 0.025):
+        # Time out if wait is too long
+        while (GPIO.input(self.echo) == 1 and (pulse_end - pulse_start) < self._maxDistanceWait):
             pulse_end = time.time()
 
         pulse_duration = pulse_end - pulse_start
@@ -79,27 +86,24 @@ class EchoSensor():
         # Check if count settled to quiclky
         # print(waitCount, distance)
         if waitCount < 10:
-            return -2
+            self.error = "Sesnor settled to quickly"
+            return (0, self.error)
 
         if distance > self._maxDistance:
-            return 1000
+            self.error = "Over max distance"
+            return (0, self.error)
         else:
-            return distance
+            return (distance, self.error)
 
     def _convertDistance(self, pulse_duration):
-
-        # Speed of sound = 34300 m/s. Round trip
-        distance = pulse_duration * 34300 / 2
+        distance = pulse_duration * self._speedOfSound / 2 # Round trip
         return distance
 
-
     def __repr__(self):
-
         return ("SensorInterface object. Trig ="+str(self.trig)+" Echo="+str(self.echo)+".")
 
 if (__name__ == '__main__'):
 
     sensor = DistanceSensor("Test")
-
     info = sensor.getData()
     print(info)
