@@ -1,4 +1,3 @@
 #!/bin/bash
 
-BINPATH=`dirname`
-python3 "$BINPATH/../passing_distance/main.py"
+python3 passing_distance/main.py

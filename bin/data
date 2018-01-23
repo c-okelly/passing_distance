@@ -1,4 +1,3 @@
 #!/bin/bash
 
-BINPATH=`dirname $0`
-python3 "$BINPATH/../passing_distance/utlis/displayData.py" $@
+python3 "passing_distance/utlis/displayData.py" $@

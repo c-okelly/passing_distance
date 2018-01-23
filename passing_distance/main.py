@@ -41,7 +41,7 @@ def collectAndStoreData(path, saveLocation="data"):
     saveLocation = path + saveLocation
 
     # Collection varibles
-    sensorWaitTime = 0.01
+    sensorWaitTime = 0.005
     dataPerWrite = 50
     fileCount = 0
     dataCollectionCount = 0
@@ -65,6 +65,8 @@ def collectAndStoreData(path, saveLocation="data"):
             print(dataCollectionCount / (time.time() - startTime), " recordings a second. \n") 
             fileCount += 1
             # print(sensorData)
+            for i in sensorData:
+                print(sensorData.get(i))
             writeDataToFile(path, sensorData, dirName, fileCount)
             dataCollectionCount = 0
             sensorData = {}
