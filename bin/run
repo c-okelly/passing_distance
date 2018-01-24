@@ -1,3 +1,5 @@
 #!/bin/bash
 
-python3 passing_distance/main.py
+path="`dirname $0`/../passing_distance/main.py"
+#echo $path
+python3 $path
